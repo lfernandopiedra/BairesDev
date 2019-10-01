@@ -6,7 +6,7 @@ namespace Jokes.Controllers
     {
         public ActionResult Index()
         {
-            
+
             return View();
         }
 
@@ -34,6 +34,6 @@ namespace Jokes.Controllers
             return View();
         }
 
-     
+
     }
 }

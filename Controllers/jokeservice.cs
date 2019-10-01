@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using Newtonsoft.Json.Linq;
 
 namespace Jokes.Controllers
 {
@@ -11,12 +12,12 @@ namespace Jokes.Controllers
         {
             string Data;
             string TextHTML;
-            string[] ListJokes = new string[30];
-            string[] ShortJoke = new string[30];
-            string[] MediumJoke = new string[30];
-            string[] LargeJoke = new string[30];
+            List<string> ListJokes = new List<string>();
+            List<string> ShortJoke = new List<string>();
+            List<string> MediumJoke = new List<string>();
+            List<string> LargeJoke = new List<string>();
 
-            int countShort = 0, countMedium = 0, countLarge = 0, i;
+            int countShort = 0, countMedium = 0, countLarge = 0;
             Int32 jokeLenght;
 
             try
@@ -24,55 +25,55 @@ namespace Jokes.Controllers
                 Data = SearchCore(word);
                 var Obj = JObject.Parse(Data);
 
-                i = 0;
+
                 foreach (var child in Obj["results"])
                 {
-                    ListJokes[i] = child["joke"].ToString();
-                    i++;
+                    ListJokes.Add(child["joke"].ToString());
+
                 }
 
-                for (i = 0; i < ListJokes.Length; i++)
+                foreach (string Value in ListJokes)
                 {
-                    jokeLenght = countWords(ListJokes[i]);
+                    string ValReplace;
+                    jokeLenght = countWords(Value);
                     if (jokeLenght > 1 && jokeLenght < 10)
                     {
-                        ListJokes[i] = Regex.Replace(ListJokes[i], word, "<strong>" + word.ToUpper() + "</strong>", RegexOptions.IgnoreCase);
-                        ShortJoke[countShort] = ListJokes[i];
+                        ValReplace = Regex.Replace(Value, word, "<strong>" + word.ToUpper() + "</strong>", RegexOptions.IgnoreCase);
+                        ShortJoke.Add(ValReplace);
                         countShort++;
                     }
 
                     if (jokeLenght >= 10 && jokeLenght < 20)
                     {
-                        ListJokes[i] = Regex.Replace(ListJokes[i], word, "<strong>" + word.ToUpper() + "</strong>", RegexOptions.IgnoreCase);
-                        MediumJoke[countMedium] = ListJokes[i];
+                        ValReplace = Regex.Replace(Value, word, "<strong>" + word.ToUpper() + "</strong>", RegexOptions.IgnoreCase);
+                        MediumJoke.Add(ValReplace);
                         countMedium++;
                     }
 
                     if (jokeLenght >= 20)
                     {
-                        ListJokes[i] = Regex.Replace(ListJokes[i], word, "<strong>" + word.ToUpper() + "</strong>", RegexOptions.IgnoreCase);
-                        LargeJoke[countLarge] = ListJokes[i];
+                        ValReplace = Regex.Replace(Value, word, "<strong>" + word.ToUpper() + "</strong>", RegexOptions.IgnoreCase);
+                        LargeJoke.Add(ValReplace);
                         countLarge++;
                     }
                 }
                 TextHTML = "<h3>Short Jokes (Total:" + (countShort).ToString() + ")</h3><blockquote>";
-                for (i = 0; i < ShortJoke.Length; i++)
+
+
+                foreach (string ValueShort in ShortJoke)
                 {
-                    if (ShortJoke[i] != null)
-                        TextHTML = TextHTML + ShortJoke[i] + "<br>";
+                    TextHTML = TextHTML + ValueShort + "<br>";
                 }
                 TextHTML = TextHTML + "</blockquote><h3>Medium Jokes (Total:" + (countMedium).ToString() + ")</h3><blockquote>";
-                for (i = 0; i < MediumJoke.Length; i++)
+                foreach (string ValueMedium in MediumJoke)
                 {
-                    if (MediumJoke[i] != null)
-                        TextHTML = TextHTML + MediumJoke[i] + "<br>";
+                    TextHTML = TextHTML + ValueMedium + "<br>";
                 }
 
                 TextHTML = TextHTML + "</blockquote><h3>Long Jokes (Total:" + (countLarge).ToString() + ")</h3><blockquote>";
-                for (i = 0; i < LargeJoke.Length; i++)
+                foreach (string ValueLarge in LargeJoke)
                 {
-                    if (LargeJoke[i] != null)
-                        TextHTML = TextHTML + LargeJoke[i] + "<br>";
+                    TextHTML = TextHTML + ValueLarge + "<br>";
                 }
                 TextHTML = TextHTML + "</blockquote>";
 
@@ -85,5 +86,5 @@ namespace Jokes.Controllers
         }
     }
 
-  
+
 }
