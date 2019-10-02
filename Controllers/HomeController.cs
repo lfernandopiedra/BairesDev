@@ -4,23 +4,16 @@ namespace Jokes.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
-        {
+        readonly JokeService contJoke = new JokeService();
+        public ActionResult Index => View();
 
-            return View();
-        }
+        public ActionResult RandomJokes => View();
 
-        public ActionResult randomJokes()
-        {
-
-            return View();
-        }
-
-        public string getRandJokes()
+        public string GetRandJokes()
         {
             string data;
-            Joke ContJoke = new Joke();
-            data = ContJoke.getRandJokes();
+           
+            data = contJoke.GetRandJokes();
             return data;
         }
 
@@ -28,8 +21,7 @@ namespace Jokes.Controllers
         public ActionResult Search(string word)
         {
             string data;
-            JokeService ResJoke = new JokeService();
-            data = ResJoke.SearchResults(word);
+            data = contJoke.SearchResults(word);
             ViewBag.Message = MvcHtmlString.Create(data ?? string.Empty);
             return View();
         }
