@@ -14,11 +14,11 @@ namespace Jokes.Controllers
 
         public string GetRandJokes()
         {
-            var Joke = new WebClient();
+            var service = new WebClient();
 
             //Json
-            Joke.Headers.Add("Accept", "application/json");
-            var jsonJoke = Joke.DownloadString(url);
+            service.Headers.Add("Accept", "application/json");
+            var jsonJoke = service.DownloadString(url);
             var obj = JObject.Parse(jsonJoke);
             valJoke = obj["joke"].ToString();
             return valJoke;
@@ -26,10 +26,10 @@ namespace Jokes.Controllers
 
         public string SearchCore(string Term)
         {
-            var Joke = new WebClient();
+            var service = new WebClient();
 
-            Joke.Headers.Add("Accept", "application/json");
-            var jsonJoke = Joke.DownloadString(url + "search?term=" + Term + "&limit=30");
+            service.Headers.Add("Accept", "application/json");
+            var jsonJoke = service.DownloadString(url + "search?term=" + Term + "&limit=30");
             valJoke = Convert.ToString(jsonJoke);
             return valJoke;
         }
@@ -48,7 +48,7 @@ namespace Jokes.Controllers
         {
             string data;
             string textHTML;
-            List<Joke> ListJokes = new List<Joke>();
+            List<Joke> listJokes = new List<Joke>();
             string valReplace, textShort="", textMedium="", textLong="";
             string val;
             int countShort = 0, countMedium = 0, countLarge = 0;
@@ -62,12 +62,12 @@ namespace Jokes.Controllers
 
                 foreach (var child in Obj["results"])
                 {
-                    ListJokes.Add(new Joke() { StrJoke = child["joke"].ToString() });
+                    listJokes.Add(new Joke() { StrJoke = child["joke"].ToString() });
                 }
 
-                foreach (Joke Value in ListJokes)
+                foreach (Joke value in ListJokes)
                 {
-                    val = Value.StrJoke;
+                    val = value.StrJoke;
                     jokeLenght = CountWords(val);
                     valReplace = string.Format("<strong> {0} </strong>", Regex.Replace(val, word, word.ToUpper(), RegexOptions.IgnoreCase));
                     if (jokeLenght > 1 && jokeLenght < 10)
