@@ -5,9 +5,17 @@ namespace Jokes.Controllers
     public class HomeController : Controller
     {
         readonly JokeService contJoke = new JokeService();
-        public ActionResult Index => View();
+        public ActionResult Index()
+        {
 
-        public ActionResult RandomJokes => View();
+            return View();
+        }
+
+        public ActionResult RandomJokes()
+        {
+
+            return View();
+        }
 
         public string GetRandJokes()
         {
